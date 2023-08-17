@@ -14,11 +14,12 @@ bool is_zeros_in_args(double a, double b, double c);               /*прове�
 
 
 void enter_of_args_from_user(double* a, double* b, double* c){
-    printf("The first arguement: \t");
+    printf("Please, enter three arguments in your equation in next lines\n");
+    printf("The first argument: \t");
     scanf("%lf", a);
-    printf("The second arguement:\t");
+    printf("The second argument:\t");
     scanf("%lf", b);
-    printf("The third arguement: \t");
+    printf("The third argument: \t");
     scanf("%lf", c);
     printf("And the count of numbers after point:\t");
     scanf("%d", &count_of_numbers_after_point);
@@ -74,25 +75,30 @@ bool is_zeros_in_args(double a, double b, double c){
 }
 
 int main(){
-    double a, b, c;
-    enter_of_args_from_user(&a, &b, &c);
-    double D = b*b - 4*a*c;
-    if(!is_zeros_in_args(a, b, c)){
-        if(D < 0){
-            print_no_roots();
+    double a, b, c, D;
+    char ch_new_problem;                                        /*Флаг, хочет ли юзер решить новое уравнение*/  
+    printf("Hello, It's solver of square equation. Want to try?(Y/N) ");
+    scanf("%c", &ch_new_problem);
+
+    while(ch_new_problem == 'Y' || ch_new_problem == 'y'){
+        enter_of_args_from_user(&a, &b, &c);
+        D = b*b - 4*a*c;
+        if(!is_zeros_in_args(a, b, c)){
+            if(D < 0){
+                print_no_roots();
+            }
+            else if(D == 0){
+                print_one_root((-b) / (2*a));
+            }
+            else if(D > 0){
+                print_two_roots(((-b) + sqrt(D)) / (2*a), ((-b) - sqrt(D)) / (2*a));
+            }
         }
-        else if(D == 0){
-            print_one_root((-b) / (2*a));
-        }
-        else if(D > 0){
-            print_two_roots(((-b) + sqrt(D)) / (2*a), ((-b) - sqrt(D)) / (2*a));
-        }
+        printf("Want to try again?(Y/N) ");
+        scanf(" %c", &ch_new_problem);
     }
-
-
-
-
-
+    printf("Okey, exit\n");    
+        
 
     return 0;
 }
