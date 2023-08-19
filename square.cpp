@@ -24,7 +24,7 @@ int main(){
             if(D < 0){
                 print_no_roots();
             }
-            else if(!(abs(D) > 0)){
+            else if(!(abs(D) > 1e-16)){
                 print_one_root((-b) / (2*a));
             }
             else if(D > 0){
@@ -67,9 +67,9 @@ void enter_of_args_from_user(double* a, double* b, double* c){
     }while(!is_double(str));
     *c = atof(str);
     do{
-        printf("And the count of numbers after point:\t");
+        printf("And the count of numbers after point(only non-negative):\t");
         for(int i=0;(str[i] = getchar()) != '\n';i++){}
-        if(!is_int(str)){
+        if(!is_int(str) or str[0]=='-'){
             printf("You write something wrong, try again\n");
         }
     }while(!is_int(str));
@@ -137,10 +137,10 @@ void print_infinity_of_roots(){
     printf("There are infinity of roots\n");
 }
 bool is_zeros_in_args(double a, double b, double c){
-    if(!(abs(a) > 0) && (abs(b) > 0) && (abs(c) > 0)){     //если есть где-то нули в аргументах, то обрабатываем
+    if(!(abs(a) > 1e-16) && (abs(b) > 1e-16) && (abs(c) > 1e-16)){     //если есть где-то нули в аргументах, то обрабатываем
         print_one_root((-c) / b);
     }
-    else if((abs(a) > 0) && !(abs(b) > 0) && (abs(c) > 0)){
+    else if((abs(a) > 1e-16) && !(abs(b) > 1e-16) && (abs(c) > 1e-16)){
         if(((-c) / a) < 0){
             print_no_roots();
         }
@@ -148,22 +148,22 @@ bool is_zeros_in_args(double a, double b, double c){
             print_two_roots(sqrt((-c) / a), -sqrt((-c) / a));
         }
     }
-    else if((abs(a) > 0) && (abs(b) > 0) && !(abs(c) > 0)){
+    else if((abs(a) > 1e-16) && (abs(b) > 1e-16) && !(abs(c) > 1e-16)){
         print_two_roots(0, (-b) / a);
     }
-    else if(!(abs(a) > 0) && !(abs(b) > 0) && (abs(c) > 0)){
+    else if(!(abs(a) > 1e-16) && !(abs(b) > 1e-16) && (abs(c) > 1e-16)){
         print_no_roots();
     }
-    else if(!(abs(a) > 0) && (abs(b) > 0) && !(abs(c) > 0)){
+    else if(!(abs(a) > 1e-16) && (abs(b) > 1e-16) && !(abs(c) > 1e-16)){
         print_one_root(0);
     }
-    else if((abs(a) > 0) && !(abs(b) > 0) && !(abs(c) > 0)){
+    else if((abs(a) > 1e-16) && !(abs(b) > 1e-16) && !(abs(c) > 1e-16)){
         print_one_root(0);
     }
-    else if(!(abs(a) > 0) && !(abs(b) > 0) && !(abs(c) > 0)){
+    else if(!(abs(a) > 1e-16) && !(abs(b) > 1e-16) && !(abs(c) > 1e-16)){
         print_infinity_of_roots();
     }
-    if((abs(a) > 0) && (abs(b) > 0) && (abs(c) > 0)){     //если нет нулей, то возвращаемся в main и решаем обычное квадратное уравнение
+    if((abs(a) > 1e-16) && (abs(b) > 1e-16) && (abs(c) > 1e-16)){     //если нет нулей, то возвращаемся в main и решаем обычное квадратное уравнение
         return false;
     }
     else{
