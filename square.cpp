@@ -1,173 +1,106 @@
 #include <stdio.h>
 #include <math.h>
-
-int count_of_numbers_after_point;     //кол-во чисел после запятой среди выводимых чисел
+#define BUFF_CLEAN while((getchar() != '\n') {}    //очистка буфера
 
 void enter_of_args_from_user(double* a, double* b, double* c);
-bool is_double(char str[]);
-bool is_int(char str[]);
-void print_one_root(double x);
-void print_two_roots(double x1, double x2);
-void print_no_roots();
-void print_infinity_of_roots();
-bool is_zeros_in_args(double a, double b, double c);    //проверка на нули среди аргументов, если есть то ещё и их обработка
+int compare_with_zero(double x);    //сравнение x с нулём, если больше возвращает 1, если равно - 0, меньше - -1
+void dispatcher(double a, double b, double c);    //вызывает функции square, linear или print_of_roots в зависимости от нулей в аргументах
+void square(double a, double b, double c);
+void linear(double b, double c);
+void print_of_roots(double x1, double x2, bool flag_infinity_of_roots, int how_many_roots);
+
 
 int main(){
-    double a = 0, b = 0, c = 0, D = 0;
-    char ch_new_problem = 'N';    //Флаг, хочет ли юзер решить новое уравнение
+    double a = NAN, b = NAN, c = NAN;
+    char flag_to_solve_new_problem = 'N';    //Флаг, хочет ли юзер решить новое уравнение
+
     printf("Hello, It's solver of square equation. Want to try?(Y/N, default N) ");
-    scanf("%c", &ch_new_problem);
-    while(ch_new_problem == 'Y' || ch_new_problem == 'y'){
+    scanf("%c", &flag_to_solve_new_problem);
+    BUFF_CLEAN;
+    while(flag_to_solve_new_problem == 'Y' || flag_to_solve_new_problem == 'y'){
         enter_of_args_from_user(&a, &b, &c);
-        D = b*b - 4*a*c;
-        if(!is_zeros_in_args(a, b, c)){
-            if(D < 0){
-                print_no_roots();
-            }
-            else if(!(abs(D) > 1e-16)){
-                print_one_root((-b) / (2*a));
-            }
-            else if(D > 0){
-                print_two_roots(((-b) + sqrt(D)) / (2*a), ((-b) - sqrt(D)) / (2*a));
-            }
-        }
+        dispatcher(a, b, c);
         printf("Want to try again?(Y/N, default N) ");
-        scanf("%c", &ch_new_problem);
+        scanf("%c", &flag_to_solve_new_problem);
+        BUFF_CLEAN;
     }
-    printf("Okey, exit\n");    
+    printf("Okey, exit\n");
     return 0;
 }
 
 void enter_of_args_from_user(double* a, double* b, double* c){
-    while(getchar() != '\n'){}  //Заглушка, для того чтобы не влиял первый '\n' после scanf, а также вероятные ошибки(доп. символы) при вводе Y/N 
-    char str[100];
-    printf("Please, enter three arguments in your equation in next lines\n");
-    do{
-        printf("The first argument:\t");
-        for(int i=0;(str[i] = getchar()) != '\n';i++){}        
-        if(!is_double(str)){
+    int count_of_right_enters = 0;      //
+    while(count_of_right_enters != 3){
+        printf("Please, enter three arguments in your equation in next line like a b c\n");
+        count_of_right_enters = scanf("%lf%lf%lf", a, b, c);
+        if(count_of_right_enters != 3 or getchar() != '\n'){
+            count_of_right_enters = 0;
+            BUFF_CLEAN;
             printf("You write something wrong, try again\n");
+            continue;
         }
-    }while(!is_double(str));
-    *a = atof(str);
-    do{
-        printf("The second argument:\t");
-        for(int i=0;(str[i] = getchar()) != '\n';i++){}        
-        if(!is_double(str)){
-            printf("You write something wrong, try again\n");
-        }
-    }while(!is_double(str));
-    *b = atof(str);
-    do{
-        printf("The third argument:\t");
-        for(int i=0;(str[i] = getchar()) != '\n';i++){}        
-        if(!is_double(str)){
-            printf("You write something wrong, try again\n");
-        }
-    }while(!is_double(str));
-    *c = atof(str);
-    do{
-        printf("And the count of numbers after point(only non-negative):\t");
-        for(int i=0;(str[i] = getchar()) != '\n';i++){}
-        if(!is_int(str) or str[0]=='-'){
-            printf("You write something wrong, try again\n");
-        }
-    }while(!is_int(str));
-    count_of_numbers_after_point = atoi(str);
-    
+    }
 }
-bool is_int(char str[]){
-    if(str[0] == '\n'){
-        return false;
+
+int compare_with_zero(double x){
+    if(abs(x) > 1e-16 && x > 0){    //можно сравнить с 0, т.к. до этого была проверка модуля с 1e-16
+        return 1;
     }
-    for(int i=0;i<100;i++){
-        if(str[i] == '\n'){
-            return true;
-        }
-        if(str[i] == '-' && i != 0){
-            return false;
-        }
-        else if(str[i]<'0' || str[i]>'9'){
-            return false;
-        }
+    if(abs(x) < 1e-16){
+        return 0;
     }
-    return true;
+    return -1;
 }
-bool is_double(char str[]){
-    int count_of_points = 0;
-    int index_of_point = 0;
-    if(is_int(str)){
-        return true;
+
+void dispatcher(double a, double b, double c){
+    if(compare_with_zero(a) != 0){
+        square(a, b, c);
     }
-    if(str[0] == '.'){
-        return false;
+    else if(compare_with_zero(b) != 0){
+        linear(b, c);
     }
-    for(int i=0;i<100;i++){
-        if(str[i] == '-' && i != 0){
-            return false;
-        }
-        else if(str[i] == '.' && str[i-1] != '-'){
-            count_of_points++;
-            index_of_point = i;        
-        }
-        else if(str[i] == '\n'){
-            if((count_of_points == 1) && ((i - index_of_point) > 1) && ((index_of_point > 1 && str[0] == '-') || (index_of_point > 0 && str[i] != '-')) ){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-        else if((str[i]<'0' || str[i]>'9') && str[i] != '-'){
-            return false;
-        }
-    }
-    return false;
-}
-void print_one_root(double x){
-    printf("There are only one root:\t%.*lf\n", count_of_numbers_after_point, x);
-}
-void print_two_roots(double x1, double x2){
-    printf("There are two roots:\t%.*lf\t%.*lf\n", count_of_numbers_after_point, x1, count_of_numbers_after_point, x2);
-}
-void print_no_roots(){
-    printf("Sorry, but there aren't any roots\n");
-}
-void print_infinity_of_roots(){
-    printf("There are infinity of roots\n");
-}
-bool is_zeros_in_args(double a, double b, double c){
-    if(!(abs(a) > 1e-16) && (abs(b) > 1e-16) && (abs(c) > 1e-16)){     //если есть где-то нули в аргументах, то обрабатываем
-        print_one_root((-c) / b);
-    }
-    else if((abs(a) > 1e-16) && !(abs(b) > 1e-16) && (abs(c) > 1e-16)){
-        if(((-c) / a) < 0){
-            print_no_roots();
-        }
-        else{
-            print_two_roots(sqrt((-c) / a), -sqrt((-c) / a));
-        }
-    }
-    else if((abs(a) > 1e-16) && (abs(b) > 1e-16) && !(abs(c) > 1e-16)){
-        print_two_roots(0, (-b) / a);
-    }
-    else if(!(abs(a) > 1e-16) && !(abs(b) > 1e-16) && (abs(c) > 1e-16)){
-        print_no_roots();
-    }
-    else if(!(abs(a) > 1e-16) && (abs(b) > 1e-16) && !(abs(c) > 1e-16)){
-        print_one_root(0);
-    }
-    else if((abs(a) > 1e-16) && !(abs(b) > 1e-16) && !(abs(c) > 1e-16)){
-        print_one_root(0);
-    }
-    else if(!(abs(a) > 1e-16) && !(abs(b) > 1e-16) && !(abs(c) > 1e-16)){
-        print_infinity_of_roots();
-    }
-    if((abs(a) > 1e-16) && (abs(b) > 1e-16) && (abs(c) > 1e-16)){     //если нет нулей, то возвращаемся в main и решаем обычное квадратное уравнение
-        return false;
+    else if(compare_with_zero(c) != 0){
+        print_of_roots(NAN, NAN, false, 0);
     }
     else{
-        return true;
+        print_of_roots(NAN, NAN, true, NAN);
+    }
+}
+
+void square(double a, double b, double c){
+    double D = b*b - 4*a*c;
+    if(compare_with_zero(D) == -1){     //дискриминант меньше нуля, корней нет
+        print_of_roots(NAN, NAN, false, 0);
+    }
+    else if(compare_with_zero(D) == 0){     //дискриминант равен нулю, один корень
+        print_of_roots((-b) / (2*a), NAN, false, 1);
+    }
+    else{
+        print_of_roots((-b + sqrt(D)) / (2*a), (-b - sqrt(D)) / (2*a), false, 2);
+    }
+}
+
+void linear(double b, double c){
+    if(compare_with_zero(c) == 0){
+        print_of_roots(NAN, NAN, false, 0);
+    }
+    else{
+        print_of_roots((-c) / b, NAN, false, 1);
+    }
+}
+
+void print_of_roots(double x1, double x2, bool flag_infinity_of_roots, int how_many_roots){
+    if(flag_infinity_of_roots){
+        printf("There are infinity of roots\n");
+    }
+    else if(how_many_roots == 0){
+        printf("Sorry, but there aren't any roots\n");
+    }
+    else if(how_many_roots == 1){
+        printf("There are only one root:\t%lf\n", x1);
+    }
+    else if(how_many_roots == 2){
+        printf("There are two roots:\t%lf\t%lf\n", x1, x2);
     }
 }
 
