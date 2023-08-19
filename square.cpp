@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#define BUFF_CLEAN while((getchar() != '\n') {}    //очистка буфера
+#define BUFF_CLEAN while(getchar() != '\n') {}    //очистка буфера
 
 void enter_of_args_from_user(double* a, double* b, double* c);
 int compare_with_zero(double x);    //сравнение x с нулём, если больше возвращает 1, если равно - 0, меньше - -1
