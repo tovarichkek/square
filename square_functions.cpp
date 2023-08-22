@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <assert.h>
 #include "square_functions.h"
 
 #define EXP 1e-16
@@ -17,6 +18,10 @@ void get_args_from_user(double* a, double* b, double* c){
             printf("You write something wrong, try again\n");
         }
     }
+    assert(!std::isnan(*a));
+    assert(!std::isnan(*b));
+    assert(!std::isnan(*c));
+        assert(a != b && a != c && b != c);
 }
 
 void buff_clean(){
@@ -24,6 +29,8 @@ void buff_clean(){
 }
 
 int compare_with_zero(double x){
+    assert(!std::isnan(x));
+
     if(abs(x) > EXP && x > 0){    //можно сравнить с 0, т.к. до этого была проверка модуля с EXP
         return MORE;
     }
@@ -34,6 +41,11 @@ int compare_with_zero(double x){
 }
 
 int solve_equasion(double a, double b, double c, double* x1, double* x2){
+    assert(!std::isnan(a));
+    assert(!std::isnan(b));
+    assert(!std::isnan(c));
+    assert(x1 != x2);
+
     if(compare_with_zero(a) != EQUAL){
         return solve_square_equasion(a, b, c, x1, x2);
     }
@@ -53,6 +65,11 @@ int solve_equasion(double a, double b, double c, double* x1, double* x2){
 }
 
 int solve_square_equasion(double a, double b, double c, double* x1, double* x2){
+    assert(!std::isnan(a));
+    assert(!std::isnan(b));
+    assert(!std::isnan(c));
+    assert(x1 != x2);
+    
     double D = b*b - 4*a*c;
     if(compare_with_zero(D) == LESS){     //дискриминант меньше нуля, корней нет
         *x1 = NAN;
@@ -72,6 +89,10 @@ int solve_square_equasion(double a, double b, double c, double* x1, double* x2){
 }
 
 int solve_linear_equasion(double b, double c, double* x1, double* x2){
+    assert(!std::isnan(b));
+    assert(!std::isnan(c));
+    assert(x1 != x2);
+
     if(compare_with_zero(c) == EQUAL){
         *x1 = NAN;
         *x2 = NAN;
@@ -85,6 +106,9 @@ int solve_linear_equasion(double b, double c, double* x1, double* x2){
 }
 
 void print_roots(double x1, double x2, int how_many_roots){
+    assert(how_many_roots > -1);
+    
+
     switch(how_many_roots){
         case INFINITY_OF_ROOTS : printf("There are infinity of roots\n"); break;
         case NO_ROOTS : printf("Sorry, but there aren't any roots\n"); break;

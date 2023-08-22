@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <assert.h>
 #include "square_functions.h"
 
 int main(){
@@ -9,12 +10,20 @@ int main(){
     int count_roots = -1;
     printf("Hello, It's solver of square equation. Want to try?(Y/N, default N) ");
     scanf("%c", &flag_to_solve_new_problem);
-    if(flag_to_solve_new_problem != '\n'){
+    if(flag_to_solve_new_problem != '\n'){      //проверка на случай если пользовательничего не ввёл(случай default N) 
         buff_clean();
     }
     while(flag_to_solve_new_problem == 'Y' || flag_to_solve_new_problem == 'y'){
         get_args_from_user(&a, &b, &c);
+        
+        assert(!std::isnan(a));
+        assert(!std::isnan(b));
+        assert(!std::isnan(c));
+
         count_roots = solve_equasion(a, b, c, &x1, &x2);
+
+        assert(count_roots > -1);
+
         print_roots(x1, x2, count_roots);
         printf("Want to try again?(Y/N, default N) ");
         scanf("%c", &flag_to_solve_new_problem);
