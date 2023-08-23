@@ -13,9 +13,5 @@ Tests are in tests.txt, it has format: a b c count_of_roots (x1ref) (x2ref)
 
 brackets - may not be if root isn't exist
 
-Write next lines to run this programm with test:
-
-g++ test.cpp square_functions.cpp -o test.out
-
-./test.out
+To run programm with tests, add option -DTEST
 
