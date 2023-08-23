@@ -3,12 +3,28 @@
 #include <assert.h>
 #include "square_functions.h"
 
-#define EXP 1e-16
-enum COUNT_OF_ROOTS{ NO_ROOTS = 0, ONE_ROOT = 1, TWO_ROOTS = 2, INFINITY_OF_ROOTS = 1000 };
-enum COMPARISON{ MORE = 1, EQUAL = 0, LESS = -1 };
+bool ask_to_solve_new_equation(){
+    char flag_to_solve_new_problem = 'N';    //Flag, do user want to solve new equation
+    printf("Want to solve new equation?(Y/N, default N) ");
+    scanf("%c", &flag_to_solve_new_problem);
+    if(flag_to_solve_new_problem != '\n'){      //check last symbol, for default N
+        buff_clean();
+    }
+    if(flag_to_solve_new_problem == 'Y' || flag_to_solve_new_problem == 'y'){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 
 void get_args_from_user(double* a, double* b, double* c){
-    int count_of_right_enters = 0;      //
+    assert(a != b && a != c && b != c);
+    assert(a != NULL);
+    assert(b != NULL);
+    assert(c != NULL);
+
+    int count_of_right_enters = 0; 
     while(count_of_right_enters != 3){
         printf("Please, enter three arguments in your equation in next line like a b c\n");
         count_of_right_enters = scanf("%lf%lf%lf", a, b, c);
@@ -18,41 +34,39 @@ void get_args_from_user(double* a, double* b, double* c){
             printf("You write something wrong, try again\n");
         }
     }
-    assert(!std::isnan(*a));
-    assert(!std::isnan(*b));
-    assert(!std::isnan(*c));
-        assert(a != b && a != c && b != c);
 }
 
 void buff_clean(){
     while(getchar() != '\n'){}
 }
 
-int compare_with_zero(double x){
-    assert(!std::isnan(x));
-
-    if(abs(x) > EXP && x > 0){    //можно сравнить с 0, т.к. до этого была проверка модуля с EXP
+int compare(double x1, double x2){
+    assert(std::isfinite(x1));
+    assert(std::isfinite(x2));
+    if(fabs(x1 - x2) > EXP && (x1 - x2) > 0){
         return MORE;
     }
-    if(abs(x) < EXP){
+    if(fabs(x1 - x2) < EXP){
         return EQUAL;
     }
     return LESS;
 }
 
 int solve_equasion(double a, double b, double c, double* x1, double* x2){
-    assert(!std::isnan(a));
-    assert(!std::isnan(b));
-    assert(!std::isnan(c));
+    assert(std::isfinite(a));
+    assert(std::isfinite(b));
+    assert(std::isfinite(c));
     assert(x1 != x2);
+    assert(x1 != NULL);
+    assert(x2 != NULL); 
 
-    if(compare_with_zero(a) != EQUAL){
+    if(compare(a, 0) != EQUAL){
         return solve_square_equasion(a, b, c, x1, x2);
     }
-    else if(compare_with_zero(b) != EQUAL){
+    else if(compare(b, 0) != EQUAL){
         return solve_linear_equasion(b, c, x1, x2);
     }
-    else if(compare_with_zero(c) != EQUAL){
+    else if(compare(c, 0) != EQUAL){
         *x1 = NAN;
         *x2 = NAN;
         return NO_ROOTS;
@@ -65,38 +79,43 @@ int solve_equasion(double a, double b, double c, double* x1, double* x2){
 }
 
 int solve_square_equasion(double a, double b, double c, double* x1, double* x2){
-    assert(!std::isnan(a));
-    assert(!std::isnan(b));
-    assert(!std::isnan(c));
+    assert(std::isfinite(a));
+    assert(std::isfinite(b));
+    assert(std::isfinite(c));
     assert(x1 != x2);
-    
+    assert(x1 != NULL);
+    assert(x2 != NULL); 
+
     double D = b*b - 4*a*c;
-    if(compare_with_zero(D) == LESS){     //дискриминант меньше нуля, корней нет
+    if(compare(D, 0) == LESS){     //Discriminant < 0, no roots
         *x1 = NAN;
         *x2 = NAN;
         return NO_ROOTS;
     }
-    else if(compare_with_zero(D) == EQUAL){     //дискриминант равен нулю, один корень
+    else if(compare(D, 0) == EQUAL){     //Discriminant == 0, one root
         *x1 = (-b) / (2*a);
         *x2 = NAN;
         return ONE_ROOT;
     }
     else{
-        *x1 = (-b + sqrt(D)) / (2*a);
-        *x2 = (-b - sqrt(D)) / (2*a);
+        double s = sqrt(D);         //Discriminant > 0, two roots
+        *x1 = (-b + s) / (2*a);
+        *x2 = (-b - s) / (2*a);
         return TWO_ROOTS;
     }
 }
 
 int solve_linear_equasion(double b, double c, double* x1, double* x2){
-    assert(!std::isnan(b));
-    assert(!std::isnan(c));
+    assert(std::isfinite(b));
+    assert(std::isfinite(c));
     assert(x1 != x2);
+    assert(x1 != NULL);
+    assert(x2 != NULL);
 
-    if(compare_with_zero(c) == EQUAL){
-        *x1 = NAN;
+    if(compare(c, 0) == EQUAL){
+        *x1 = 0;
         *x2 = NAN;
-        return NO_ROOTS;
+        return ONE_ROOT;
     }
     else{
         *x1 = (-c) / b;
@@ -106,14 +125,22 @@ int solve_linear_equasion(double b, double c, double* x1, double* x2){
 }
 
 void print_roots(double x1, double x2, int how_many_roots){
-    assert(how_many_roots > -1);
+    assert(how_many_roots > INVALID);
     
-
     switch(how_many_roots){
-        case INFINITY_OF_ROOTS : printf("There are infinity of roots\n"); break;
-        case NO_ROOTS : printf("Sorry, but there aren't any roots\n"); break;
-        case ONE_ROOT : printf("There are only one root:\t%lf\n", x1); break;
-        case TWO_ROOTS : printf("There are two roots:\t%lf\t%lf\n", x1, x2); break;
-        default : printf("ERROR IN how_many_roots");
+        case INFINITY_OF_ROOTS : 
+            printf("There are infinity of roots\n"); 
+            break;
+        case NO_ROOTS : 
+            printf("Sorry, but there aren't any roots\n"); 
+            break;
+        case ONE_ROOT :
+            printf("There are only one root:\t%.12lf\n", x1); 
+            break;
+        case TWO_ROOTS :
+            printf("There are two roots:\t%.12lf\t%.12lf\n", x1, x2);  
+            break;
+        default :
+            printf("ERROR IN how_many_roots");
     }
 }
