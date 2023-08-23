@@ -9,7 +9,9 @@ g++ square_main.cpp square_functions.cpp
 ./a.out
 
 # Test of square solver
-Tests are in tests.txt, it has format: a, b, c, count_of_roots, x1_ref, x2_ref. If root isn't exist, write -999999.
+Tests are in tests.txt, it has format: a b c count_of_roots (x1ref) (x2ref)
+
+brackets - may not be if root isn't exist
 
 Write next lines to run this programm with test:
 
