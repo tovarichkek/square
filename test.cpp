@@ -1,49 +1,76 @@
 #include <stdio.h>
 #include <math.h>
 #include "square_functions.h"
-void coeff_to_zero(double* x1, double* x2, int* count_of_roots_in_programm);
-void print_err(int test_number, double a, double b, double c, int count_of_roots_in_programm, double x1, double x2, int count_of_roots_ref, double x1_ref, double x2_ref);
+
+bool input_test(int count_of_coeffs, FILE* file, double coeffs[], int* count_of_roots_ref, double roots_ref[]);    //If EOF, return false, else true
+bool check_results(int count_of_roots, double roots[], int count_of_roots_ref, double roots_ref[]);
+void print_err(int test_number, int count_of_coeffs, double coeffs[], int count_of_roots, double roots[], int count_of_roots_ref, double roots_ref[]);
+
 
 int main(){
-    double a = NAN, b = NAN, c = NAN, x1_ref = NAN, x2_ref = NAN;
-    double x1 = NAN, x2 = NAN;
-    int count_of_roots_in_programm = INVALID, count_of_roots_ref = INVALID;    
+    int count_of_coeffs = 3;
+
+    double coeffs[] = {NAN, NAN, NAN, NAN, NAN, NAN}, roots[] = {NAN, NAN, NAN, NAN, NAN}, roots_ref[] = {NAN, NAN, NAN, NAN, NAN};
+    int count_of_roots = INVALID, count_of_roots_ref = INVALID;
     FILE* file;
     file = fopen("tests.txt", "r");
-    for(int test_number = 1; fscanf(file, "%lf%lf%lf%d%lf%lf", &a, &b, &c, &count_of_roots_ref, &x1_ref, &x2_ref) != EOF; test_number++){
-        coeff_to_zero(&x1, &x2, &count_of_roots_in_programm);
-        count_of_roots_in_programm = solve_equasion(a, b, c, &x1, &x2);
-
-        if(count_of_roots_in_programm != count_of_roots_ref){
-            print_err(test_number, a, b, c, count_of_roots_in_programm, x1, x2, count_of_roots_ref, x1_ref, x2_ref);
+    for(int test_number = 1; true; test_number++){
+        if(!input_test(count_of_coeffs, file, coeffs, &count_of_roots_ref, roots_ref)){
+            break;
+        }
+        count_of_roots = solve_equasion(coeffs, roots, count_of_coeffs);
+        if(!check_results(count_of_roots, roots, count_of_roots_ref, roots_ref)){
+            print_err(test_number, count_of_coeffs, coeffs, count_of_roots, roots, count_of_roots_ref, roots_ref);
             continue;
-        }
-        else if(count_of_roots_ref == ONE_ROOT){
-            if(!std::isfinite(x1) || compare(x1, x1_ref) != EQUAL){   //!std::isfinite for no run assert(isfinite) in compare()
-                print_err(test_number, a, b, c, count_of_roots_in_programm, x1, x2, count_of_roots_ref, x1_ref, x2_ref);
-                continue;
-            }
-        }
-        else if(count_of_roots_ref == TWO_ROOTS){
-            if(!std::isfinite(x1) || !std::isfinite(x2) || (compare(x1, x1_ref) != EQUAL || compare(x2, x2_ref) != EQUAL) && (compare(x1, x2_ref) != EQUAL && compare(x2, x1_ref) != EQUAL)){
-                print_err(test_number, a, b, c, count_of_roots_in_programm, x1, x2, count_of_roots_ref, x1_ref, x2_ref);
-                continue;
-            }
         }
         printf("Test №%d is OK\n", test_number);
     }
     fclose(file);
 }
 
-void coeff_to_zero(double* x1, double* x2, int* count_of_roots_in_programm){
-    *x1 = 0;
-    *x2 = 0;
-    *count_of_roots_in_programm = 0;
+bool input_test(int count_of_coeffs, FILE* file, double coeffs[], int* count_of_roots_ref, double roots_ref[]){
+    for(int i = 0; i < count_of_coeffs; i++){
+        if(fscanf(file, "%lf", &coeffs[i]) == EOF){
+            return false;
+        }
+    }
+    fscanf(file, "%d", count_of_roots_ref);
+    for(int i = 0; i < *count_of_roots_ref; i++){
+        fscanf(file, "%lf", &roots_ref[i]);
+    }
+    return true;
 }
 
-void print_err(int test_number, double a, double b, double c, int count_of_roots_in_programm, double x1, double x2, int count_of_roots_ref, double x1_ref, double x2_ref){
-    printf("ERROR in %d test a: %lf, b: %lf, c:%lf\n", test_number, a, b, c);
-    printf("count_of_roots_in_programm: %d, x1: %lf, x2: %lf\n", count_of_roots_in_programm, x1, x2);
-    printf("count_of_roots_ref : %d,  x1_ref : %lf, x2_ref: %lf\n", count_of_roots_ref, x1_ref, x2_ref);
+bool check_results(int count_of_roots, double roots[], int count_of_roots_ref, double roots_ref[]){
+    if(count_of_roots != count_of_roots_ref){
+        return false;
+    }
+    if(count_of_roots == ONE_ROOT){
+        if(compare(roots[0], roots_ref[0]) != EQUAL){
+            return false;
+        }
+    }
+    if(count_of_roots == TWO_ROOTS){
+        if(compare(roots[0], roots_ref[0]) != EQUAL || compare(roots[1], roots_ref[1]) != EQUAL){
+            return false;
+        }
+    }
+    return true;
+}
+
+void print_err(int test_number, int count_of_coeffs, double coeffs[], int count_of_roots, double roots[], int count_of_roots_ref, double roots_ref[]){
+    printf("ERROR in %d test, coeffs:", test_number);
+    for(int i = 0; i < count_of_coeffs; i++){
+        printf("% lf,", coeffs[i]);
+    }
+    printf("\ncount_of_roots: %d, roots:", count_of_roots);
+    for(int i = 0; i < count_of_roots; i++){
+        printf(" %lf,", roots[i]);
+    }
+    printf("\ncount_of_roots_ref: %d, roots_ref:", count_of_roots_ref);
+    for(int i = 0; i < count_of_roots_ref; i++){
+        printf(" %lf,", roots_ref[i]);
+    }
+    printf("\n");
 }
 
