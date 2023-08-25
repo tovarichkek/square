@@ -1,0 +1,14 @@
+all: square_solver_test.out
+
+square_solver_test.out: square_functions.o square_main.o square_test.o
+	g++ square_functions.o square_main.o square_test.o $(cat dedflags.txt) -o square_solver_test.out
+
+square_test.o: square_test.cpp
+	g++ -c square_test.cpp $(cat dedflags.txt)
+
+square_main.o: square_main.cpp
+	g++ -c square_main.cpp $(cat dedflags.txt)
+
+square_functions.o: square_functions.cpp
+	g++ -c square_functions.cpp $(cat dedflags.txt)
+
