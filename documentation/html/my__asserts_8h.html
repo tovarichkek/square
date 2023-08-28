@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: square solver</title>
+<title>My Project: my_asserts.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -45,7 +45,6 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -60,25 +59,60 @@ $(function() {
 </iframe>
 </div>
 
-<div class="PageDoc"><div class="header">
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
-<div class="title">square solver </div>  </div>
+<div class="title">my_asserts.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_README"></a>Hello, It's solver of square equation.</p>
-<p>Write next lines in your command line to execute this programm:</p>
-<p>g++ <a class="el" href="square__functions_8cpp.html">square_functions.cpp</a> <a class="el" href="square__main_8cpp.html">square_main.cpp</a> $(cat dedflags.txt)</p>
-<p>./a.out</p>
-<h1><a class="anchor" id="autotoc_md1"></a>
-Test of square solver</h1>
-<p>Tests are in tests.txt, it has format: a b c count_of_roots (x1ref) (x2ref)</p>
-<p>brackets - may not be if root isn't exist</p>
-<p>To run programm with tests add file <a class="el" href="square__test_8cpp.html">square_test.cpp</a> and option -DTEST when compile like:</p>
-<p>g++ <a class="el" href="square__functions_8cpp.html">square_functions.cpp</a> <a class="el" href="square__main_8cpp.html">square_main.cpp</a> <a class="el" href="square__test_8cpp.html">square_test.cpp</a> $(cat dedflags.txt) -DTEST</p>
-<h1><a class="anchor" id="autotoc_md2"></a>
-Square solver without debug</h1>
-<p>If you want run programm without debug(my_assert) add option -DNDEBUG when compile </p>
-</div></div><!-- PageDoc -->
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;math.h&gt;</code><br />
+</div>
+<p><a href="my__asserts_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a86a5825ea3cc0dccc50177903b3ab019"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="my__asserts_8h.html#a86a5825ea3cc0dccc50177903b3ab019">my_assert</a>(expression,  instructions)</td></tr>
+<tr class="separator:a86a5825ea3cc0dccc50177903b3ab019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Header with macros for my_assert </p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a86a5825ea3cc0dccc50177903b3ab019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86a5825ea3cc0dccc50177903b3ab019">&#9670;&nbsp;</a></span>my_assert</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define my_assert</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">expression, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">instructions&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">        <span class="keywordflow">if</span>(!(expression)){ \</div>
+<div class="line">            fprintf(stderr, <span class="stringliteral">&quot;ERROR IN FILE:%s FUNCTION:%s LINE:%d\n&quot;</span>, __FILE__, __FUNCTION__, __LINE__); \</div>
+<div class="line">            instructions; \</div>
+<div class="line">        }</div>
+</div><!-- fragment --><p>Used to find programmer's mistakes. Accept expression, that should be checked and instructions, that should run. Example: my_assert(c == NULL, printf("ERR"); return 0); instead of (printf("ERR"); return 0) may be any other instructions </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

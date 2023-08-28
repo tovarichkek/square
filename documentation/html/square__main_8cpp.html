@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: square solver</title>
+<title>My Project: square_main.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -45,7 +45,6 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -60,25 +59,47 @@ $(function() {
 </iframe>
 </div>
 
-<div class="PageDoc"><div class="header">
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">square solver </div>  </div>
+<div class="title">square_main.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_README"></a>Hello, It's solver of square equation.</p>
-<p>Write next lines in your command line to execute this programm:</p>
-<p>g++ <a class="el" href="square__functions_8cpp.html">square_functions.cpp</a> <a class="el" href="square__main_8cpp.html">square_main.cpp</a> $(cat dedflags.txt)</p>
-<p>./a.out</p>
-<h1><a class="anchor" id="autotoc_md1"></a>
-Test of square solver</h1>
-<p>Tests are in tests.txt, it has format: a b c count_of_roots (x1ref) (x2ref)</p>
-<p>brackets - may not be if root isn't exist</p>
-<p>To run programm with tests add file <a class="el" href="square__test_8cpp.html">square_test.cpp</a> and option -DTEST when compile like:</p>
-<p>g++ <a class="el" href="square__functions_8cpp.html">square_functions.cpp</a> <a class="el" href="square__main_8cpp.html">square_main.cpp</a> <a class="el" href="square__test_8cpp.html">square_test.cpp</a> $(cat dedflags.txt) -DTEST</p>
-<h1><a class="anchor" id="autotoc_md2"></a>
-Square solver without debug</h1>
-<p>If you want run programm without debug(my_assert) add option -DNDEBUG when compile </p>
-</div></div><!-- PageDoc -->
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;math.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="square__functions_8h_source.html">square_functions.h</a>&quot;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="square__main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
+<tr class="memdesc:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The main function.  <a href="square__main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">More...</a><br /></td></tr>
+<tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Main file </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ae66f6b31b5ad750f1fe042a706a4e3d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae66f6b31b5ad750f1fe042a706a4e3d4">&#9670;&nbsp;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The main function. </p>
+<p>If option -DTEST on, go to TEST MODE - directive #else, otherwise #ifndef TEST. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
