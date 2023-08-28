@@ -1,11 +1,16 @@
 #pragma once
 
+/**
+    * @file
+    * Prototypes for work of Square solver tester
+ */
+
 //Prototypes--------------------------------------------------------------------------
 
 /*!
     * Main test function, run another functions
  */
-void TEST();
+void test();
 
 /*!
     * Read args in one line in file with tests and set args in variebles

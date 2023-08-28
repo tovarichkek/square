@@ -1,7 +1,13 @@
-all: square_solver_test.out
+all: square_solver.out
 
-square_solver_test.out: square_functions.o square_main.o square_test.o
-	g++ square_functions.o square_main.o square_test.o $(cat dedflags.txt) -o square_solver_test.out
+square_solver.out: square_functions.o square_main.o
+	g++ square_functions.o square_main.o $(cat dedflags.txt) -o square_solver.out
+
+square_solver_no_debug.out: 
+	g++ square_main.cpp square_functions.cpp square_test.cpp $(cat dedflags.txt) -DNDEBUG
+
+square_solver_test.out: square_main.cpp square_functions.cpp square_test.cpp
+	g++ square_main.cpp square_functions.cpp square_test.cpp $(cat dedflags.txt) -DTEST
 
 square_test.o: square_test.cpp
 	g++ -c square_test.cpp $(cat dedflags.txt)
@@ -11,4 +17,3 @@ square_main.o: square_main.cpp
 
 square_functions.o: square_functions.cpp
 	g++ -c square_functions.cpp $(cat dedflags.txt)
-

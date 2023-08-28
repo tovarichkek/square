@@ -2,6 +2,11 @@
 #include <math.h>
 #include "square_functions.h"
 
+/**
+    * @file
+    * Main file
+ */
+
 #ifdef TEST
     #include "square_test.h"
 #endif
@@ -18,6 +23,7 @@ int main(){
         int count_roots = INVALID, count_of_coeffs = INVALID;
 
         printf("Hello, It's solver of square equation. If you want to use tests, write option -DTEST when compiling\n");
+        printf("If you want run programm without debug, compile files with option -DNDEBUG\n");
 
         while(ask_to_solve_new_equation()){
             count_of_coeffs = 3;
@@ -27,7 +33,7 @@ int main(){
         }
         printf("Okey, exit\n");
     #else
-        TEST();
+        test();
     #endif // TEST
 
 

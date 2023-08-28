@@ -1,21 +1,27 @@
+#include <stdio.h>
+#include <math.h>
+
 #pragma once
 
-//Enums--------------------------------------------------------------------------
+/**
+    * @file
+    * Header with macros for my_assert
+*/
 
-enum ERROR_CODE{
-    NO_ERROR = 0,
-    ISFINITE_ERROR = 1,
-    IS_P_NULL_ERROR = 2,
-    IS_P1_EQ_P2_ERROR = 3
-};
+#ifdef NDEBUG
+    #define my_assert(expression, instructions) ;
+#else
+    /**
+     * Used to find programmer's mistakes.
+     * Accept expression, that should be checked and instructions, that should run.
+     * Example: my_assert(c == NULL, printf("ERR"); return 0);
+     * instead of (printf("ERR"); return 0) may be any other instructions
+     */
+    #define my_assert(expression, instructions) \
+        if(!(expression)){ \
+            fprintf(stderr, "ERROR IN FILE:%s FUNCTION:%s LINE:%d\n", __FILE__, __FUNCTION__, __LINE__); \
+            instructions; \
+        }
+#endif // NDEBUG
 
-//Struct--------------------------------------------------------------------------
 
-struct ERROR;
-
-//Prototypes--------------------------------------------------------------------------
-
-ERROR my_assert_fail_isfinite(double x, const char* name_file, const char* name_func, int line);
-ERROR my_assert_fail_is_p_null(const void* p, const char* name_file, const char* name_func, int line);
-ERROR my_assert_fail_is_p1_eq_p2(const void* p1, const void* p2, const char* name_file, const char* name_func, int line);
-void print_error_in_my_assert_fail(ERROR err);

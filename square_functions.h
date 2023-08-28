@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+    * @file
+    * Prototypes for work of Square solver
+ */
+
 //Enums---------------------------------------------------------------
 
 /**
@@ -22,7 +27,8 @@ enum COUNT_OF_ROOTS {
 enum COMPARISON{
     MORE = 1, ///1
     EQUAL = 0, ///0
-    LESS = -1 ///-1
+    LESS = -1, ///-1
+    UNKNOWN = -5 ///-5
 };
 
 //Prototypes---------------------------------------------------------------

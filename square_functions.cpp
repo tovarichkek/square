@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <assert.h>
+#include "my_asserts.h"
 #include "square_functions.h"
 
 bool ask_to_solve_new_equation(){
@@ -26,7 +26,7 @@ void get_args_from_user(double coeffs[], int count_of_coeffs){
     while(count_of_right_enters != count_of_coeffs){
         printf("Please, enter arguments in your equation in next line like a b...\n");
 
-        for(int i=0; i<count_of_coeffs; i++){
+        for(int i=0; i < count_of_coeffs; i++){
             if(scanf("%lf", &coeffs[i]) != 0){
                 count_of_right_enters++;
             }
@@ -47,8 +47,8 @@ void buff_clean(){
 int compare(double x1, double x2){
     const double EXP = 1e-8;
 
-    assert(std::isfinite(x1));
-    assert(std::isfinite(x2));
+    my_assert(std::isfinite(x1), return UNKNOWN);
+    my_assert(std::isfinite(x2), return UNKNOWN);
 
     if(fabs(x1 - x2) > EXP && (x1 - x2) > 0){
         return MORE;
@@ -61,7 +61,7 @@ int compare(double x1, double x2){
 
 int solve_equation(double coeffs[], double roots[], int count_of_coeffs){
     for(int i = 0; i < count_of_coeffs; i++){
-//TODO        my_assert(std::isfinite(coeffs[i]), INFINITE_ARG_PASSED);
+        my_assert(std::isfinite(coeffs[i]), return INVALID);
     }
 
     if(compare(coeffs[0], 0) != EQUAL){
@@ -84,12 +84,12 @@ int solve_equation(double coeffs[], double roots[], int count_of_coeffs){
 }
 
 int solve_square_equation(double a, double b, double c, double* x1, double* x2){    //return roots in ascending order
-    assert(std::isfinite(a));
-    assert(std::isfinite(b));
-    assert(std::isfinite(c));
-    assert(x1 != x2);
-    assert(x1 != NULL);
-    assert(x2 != NULL);
+    my_assert(std::isfinite(a), return INVALID);
+    my_assert(std::isfinite(b), return INVALID);
+    my_assert(std::isfinite(c), return INVALID);
+    my_assert(x1 != x2, return INVALID);
+    my_assert(x1 != NULL, return INVALID);
+    my_assert(x2 != NULL, return INVALID);
 
     double D = b*b - 4*a*c;
 
@@ -118,9 +118,9 @@ int solve_square_equation(double a, double b, double c, double* x1, double* x2){
 }
 
 int solve_linear_equation(double a, double b, double* x1){
-    assert(std::isfinite(a));
-    assert(std::isfinite(b));
-    assert(x1 != NULL);
+    my_assert(std::isfinite(a), return INVALID);
+    my_assert(std::isfinite(b), return INVALID);
+    my_assert(x1 != NULL, return INVALID);
 
     if(compare(b, 0) == EQUAL){
         *x1 = 0;
