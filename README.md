@@ -29,4 +29,4 @@ make -f makefile_square_solver square_solver_no_debug.out
 # Documentation 
 To get documentation:
 
-xdg-open html/index.html
+xdg-open documentation/html/index.html
