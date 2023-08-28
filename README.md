@@ -20,3 +20,9 @@ g++ square_functions.cpp square_main.cpp square_test.cpp $(cat dedflags.txt) -DT
 # Square solver without debug
 If you want run programm without debug(my_assert) add option -DNDEBUG when compile
 
+# Documentation
+To get documentetion run 
+
+doxygen Doxyfile
+
+xdg-open html/index.html
